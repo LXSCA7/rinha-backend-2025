@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17-alpine3.22
+    container_name: rinha_backend_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: rinha_backend
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
