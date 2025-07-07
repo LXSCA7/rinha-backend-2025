@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"github.com/google/uuid"
@@ -37,10 +36,18 @@ func CreateTable() {
 	}
 }
 
-func InsertTable(correlationId uuid.UUID, amount float64, status string) {
+func InsertTable(correlationId uuid.UUID, amount float64, processor, status string) {
 	command := `
-		insert into payments(?, ?, ?, ?);
+		insert into payments (correlation_id, amount, processor, status)
+		values ($1, $2, $3, $4)
 	`
 
-	fmt.Println(command)
+	_, err := db.Exec(command, correlationId, amount, processor, status)
+	if err != nil {
+		log.Printf("error: %s\n", err)
+	}
+}
+
+func Stop() {
+	db.Close()
 }
