@@ -10,7 +10,7 @@ import (
 
 var db *sql.DB
 
-func ConnectDatabase() {
+func InitDatabase() {
 	connectionString := "host=localhost user=postgres password=postgres dbname=rinha_backend port=5432 sslmode=disable"
 	database, err := sql.Open("postgres", connectionString)
 	if err != nil {
@@ -18,9 +18,10 @@ func ConnectDatabase() {
 	}
 
 	db = database
+	createTable()
 }
 
-func CreateTable() {
+func createTable() {
 	command := `
 	create table if not exists payments(
 		correlation_id uuid 			   primary key,
@@ -46,8 +47,4 @@ func InsertTable(correlationId uuid.UUID, amount float64, processor, status stri
 	if err != nil {
 		log.Printf("error: %s\n", err)
 	}
-}
-
-func Stop() {
-	db.Close()
 }
